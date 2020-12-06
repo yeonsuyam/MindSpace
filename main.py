@@ -26,8 +26,8 @@ class Mindmap:
 
 		self.nodePerLevel = [1, 1, 0, 0]
 
-		self.current_level = 1
-		self.current_node = 1
+		self.current_level = 0
+		self.current_node = 0
 
 		self.current_list = self.getCurrentList()
 
@@ -36,7 +36,7 @@ class Mindmap:
 		red_nodes = []
 		self.node_colors = ['skyblue' if not node in red_nodes else 'red' for node in self.G.nodes()]
 
-		pos = nx.spring_layout(self.G)
+		pos = dict([(self.current_list[i], [i, 0]) if i%2==0 else (self.current_list[i], [i, 1]) for i in range(len(self.current_list))])
 		# nx.draw(self.G, cmap = plt.get_cmap('jet'), node_color = self.node_colors)
 		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.G, pos)
