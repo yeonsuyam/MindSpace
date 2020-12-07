@@ -1,1 +1,5 @@
 # MindSpace
+
+## Environment
+* matplotlib
+* networkx
