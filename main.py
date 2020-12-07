@@ -1,12 +1,9 @@
 import networkx as nx
-import matplotlib.pyplot as plt
-
-import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import cycle
 
-class Mindmap:
+class MindMap:
 	def __init__(self):
 		self.G = nx.Graph()
 		# self.Glevel1 = nx.Graph()
@@ -24,24 +21,24 @@ class Mindmap:
 		# self.level3 = {}
 		self.levels = [self.level0, self.level1, self.level2]
 
-		self.nodePerLevel = [1, 1, 0, 0]
-
+		self.currentNodePerLevel = [0, 0, 0, 0]
 		self.current_level = 0
-		self.current_node = 0
 
 		self.current_list = self.getCurrentList()
+		self.current_node = 0
 
+		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
+		
 		self.G.add_edges_from(self.getCurrentEdges())
+		self.update()
 
-		red_nodes = []
-		self.node_colors = ['skyblue' if not node in red_nodes else 'red' for node in self.G.nodes()]
 
+	def update(self):
 		pos = dict([(self.current_list[i], [i, 0]) if i%2==0 else (self.current_list[i], [i, 1]) for i in range(len(self.current_list))])
-		# nx.draw(self.G, cmap = plt.get_cmap('jet'), node_color = self.node_colors)
 		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.G, pos)
 		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), arrows=False)
-		plt.show()
+		print("updated")
 
 
 	def getCurrentList(self):
@@ -49,7 +46,7 @@ class Mindmap:
 
 		for i in range(self.current_level + 1):
 			level = self.levels[i][node]
-			node = level[self.nodePerLevel[i]]
+			node = level[self.currentNodePerLevel[i]]
 
 		return level
 
@@ -67,41 +64,62 @@ class Mindmap:
 		return edges
 
 
+	def getIndex(self, l, i):
+		while i >= len(l):
+			i -= len(l)
+
+		while i < 0:
+			i += len(l)
+
+		return i
+
+
+	def currentNodeName(self):
+		return self.current_list[self.current_node]
+
+
 	def left(self):
+		self.current_node = self.getIndex(self.current_list, self.current_node - 1)
+		print("current_node", self.current_node)
+		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
+	
 		return
-		# self.
 
-# G = nx.Graph()
-# G.add_edges_from(
-#     [('A', 'A'), ('B', 'B')])
+	def right(self):
+		self.current_node = self.getIndex(self.current_list, self.current_node + 1)
+		print("current_node", self.current_node)
+		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
 
-# G.add_node("hey how are you doing?")
-# red_nodes = []
-# node_colors = ['blue' if not node in red_nodes else 'red' for node in G.nodes()]
+		return
 
 
-# Specify the edges you want here
-# red_edges = [('A', 'C'), ('E', 'C')]
-# edge_colours = ['black' if not edge in red_edges else 'red'
-				# for edge in G.edges()]
-# black_edges = [edge for edge in G.edges() if edge not in red_edges]
-
-# pos = nx.spring_layout(G)
-# nx.draw(G, cmap = plt.get_cmap('jet'), node_color = node_colors)
-# nx.draw_networkx_labels(G, pos)
-
-
+class MemorySpace(MindMap):
+	def update(self):
+		pos = dict([(self.current_list[i], [i, 0]) if i%2==0 else (self.current_list[i], [i, 1]) for i in range(len(self.current_list))])
+		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500, padding=5000)
+		nx.draw_networkx_labels(self.G, pos)
+		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
+		print("updated")
 
 
 # left hand: sfed, r
 # right hand: jlik, u
 def keyboard_input(event):
 	global mindmap
+	global memoryspace
 
-	# Left hand for new nodes
+	# Left hand for memoryspace
 	# new node
 	# if event.key == 'r':
 		# Add node
+	if event.key == 's':
+		memoryspace.left()
+	elif event.key == 'f':
+		memoryspace.right()
+	elif event.key == 'e':
+		memoryspace.up()
+	elif event.key == 'd':
+		memoryspace.down()
 
 	# Right hand for mindmaps
 	if event.key == 'j':
@@ -109,21 +127,34 @@ def keyboard_input(event):
 	elif event.key == 'l':
 		mindmap.right()
 	elif event.key == 'i':
-			mindmap.up()
+		mindmap.up()
 	elif event.key == 'k':
-			mindmap.down()
+		mindmap.down()
 
 	plt.clf()
 
-	# TODO
-	# Change this to graph plot
-	# plt.plot(data**power)
-
+	memoryspace_plt = plt.subplot(1, 2, 1)
+	memoryspace_plt.set_ylim(5, -5)
+	memoryspace.update()
+	
+	mindmap_plt = plt.subplot(1, 2, 2)
+	mindmap_plt.set_ylim(5, -5)
+	mindmap.update()
 	plt.draw()
 
 
-mindmap = Mindmap()
+# Disable keyboard shortcuts in Matplotlib
+# print(plt.rcParams)
+plt.rcParams['keymap.fullscreen'] = 'ctrl+f'
+plt.rcParams['keymap.save'] = 'ctrl+s'
+
+memoryspace_plt = plt.subplot(1, 2, 1)
+memoryspace_plt.set_ylim(5, -5)
+memoryspace = MemorySpace()
+
+mindmap_plt = plt.subplot(1, 2, 2)
+mindmap_plt.set_ylim(5, -5)
+mindmap = MindMap()
 
 plt.gcf().canvas.mpl_connect('key_press_event', keyboard_input)
 plt.show()
-
