@@ -96,16 +96,34 @@ class Mindmap:
 # left hand: sfed, r
 # right hand: jlik, u
 def keyboard_input(event):
-	# new node
-	if event.key == 'r':
-		power += 1
+	global mindmap
 
-	elif event.key == 'left':
-		power -= 1
+	# Left hand for new nodes
+	# new node
+	# if event.key == 'r':
+		# Add node
+
+	# Right hand for mindmaps
+	if event.key == 'j':
+		mindmap.left()
+	elif event.key == 'l':
+		mindmap.right()
+	elif event.key == 'i':
+			mindmap.up()
+	elif event.key == 'k':
+			mindmap.down()
 
 	plt.clf()
-	plt.plot(data**power)
+
+	# TODO
+	# Change this to graph plot
+	# plt.plot(data**power)
+
 	plt.draw()
 
 
 mindmap = Mindmap()
+
+plt.gcf().canvas.mpl_connect('key_press_event', keyboard_input)
+plt.show()
+
