@@ -119,6 +119,20 @@ class MemorySpace(MindMap):
 		print("updated MemorySpace")
 
 
+	def addSpeech(self, newSpeech):
+		if len(self.getCurrentNodeValueList()) == 0:
+			self.G.add_nodes_from([(newSpeech)])
+			self.currentNode = 1
+
+		else:
+			lastNode = self.getCurrentNodeValueList()[-1]
+			self.getCurrentNodeValueList().append(newSpeech)
+			self.currentNode = len(self.getCurrentNodeValueList()) - 1
+			self.G.add_edges_from([(lastNode, newSpeech)])
+
+		return
+
+
 # left hand: sfed, r
 # right hand: jlik, u
 def keyboard_input(event):
