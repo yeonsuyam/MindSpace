@@ -27,9 +27,9 @@ class MindMap:
 		self.current_list = self.getCurrentList()
 		self.current_node = 0
 
-		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
-		
 		self.G.add_edges_from(self.getCurrentEdges())
+		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
+
 		self.update()
 
 
@@ -38,7 +38,7 @@ class MindMap:
 		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.G, pos)
 		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), arrows=False)
-		print("updated")
+		print("updated MindMap")
 
 
 	def getCurrentList(self):
@@ -96,10 +96,10 @@ class MindMap:
 class MemorySpace(MindMap):
 	def update(self):
 		pos = dict([(self.current_list[i], [i, 0]) if i%2==0 else (self.current_list[i], [i, 1]) for i in range(len(self.current_list))])
-		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500, padding=5000)
+		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.G, pos)
 		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
-		print("updated")
+		print("updated MemorySpace")
 
 
 # left hand: sfed, r
