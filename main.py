@@ -2,6 +2,8 @@ import networkx as nx
 import numpy as np
 import matplotlib.pyplot as plt
 from itertools import cycle
+from speech import Speech
+
 
 class MindMap:
 	def __init__(self):
@@ -110,8 +112,9 @@ def keyboard_input(event):
 
 	# Left hand for memoryspace
 	# new node
-	# if event.key == 'r':
-		# Add node
+	if event.key == 'r':
+		speech.read()
+		# memoryspace.addSpeech(speech.read())
 	if event.key == 's':
 		memoryspace.left()
 	elif event.key == 'f':
@@ -142,6 +145,8 @@ def keyboard_input(event):
 	mindmap.update()
 	plt.draw()
 
+
+speech = Speech()
 
 # Disable keyboard shortcuts in Matplotlib
 # print(plt.rcParams)
