@@ -26,8 +26,8 @@ class MindMap:
 		self.currentNodePerLevel = [0, 0, 0, 0]
 		self.current_level = 0
 
-		self.current_list = self.getCurrentList()
-		self.current_node = 0
+		self.currentNodeValue_list = self.getCurrentNodeValueList()
+		self.currentNode = 0
 
 		self.G.add_edges_from(self.getCurrentEdges())
 		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
@@ -36,27 +36,27 @@ class MindMap:
 
 
 	def update(self):
-		pos = dict([(self.current_list[i], [i, 0]) if i%2==0 else (self.current_list[i], [i, 1]) for i in range(len(self.current_list))])
+		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
 		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.G, pos)
 		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), arrows=False)
 		print("updated MindMap")
 
 
-	def getCurrentList(self):
-		node = "root"
-
+	def getCurrentNodeValueList(self):
+		nodeValue = "root"
+`
 		for i in range(self.current_level + 1):
-			level = self.levels[i][node]
-			node = level[self.currentNodePerLevel[i]]
+			nodeValueListOfLevel_i = self.levels[i][nodeValue]
+			nodeValue = nodeValueListOfLevel_i[self.currentNodePerLevel[i]]
 
-		return level
+		return nodeValueListOfLevel_i
 
 
 	def getCurrentEdges(self):
 		edges = []
-		for i in range(len(self.current_list) - 1):
-			edges.append((self.current_list[i], self.current_list[i+1]))
+		for i in range(len(self.currentNodeValue_list) - 1):
+			edges.append((self.currentNodeValue_list[i], self.currentNodeValue_list[i+1]))
 
 		# TODO
 		# 만약에 아직 연결하지 않은 edge라면 흰색이나 투명색으로 edge 색상 설정
@@ -77,27 +77,32 @@ class MindMap:
 
 
 	def currentNodeName(self):
-		return self.current_list[self.current_node]
+		return self.currentNodeValue_list[self.currentNode]
 
 
 	def left(self):
-		self.current_node = self.getIndex(self.current_list, self.current_node - 1)
-		print("current_node", self.current_node)
+		self.currentNode = self.getIndex(self.currentNodeValue_list, self.currentNode - 1)
+		print("currentNode", self.currentNode)
 		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
 	
 		return
 
+
 	def right(self):
-		self.current_node = self.getIndex(self.current_list, self.current_node + 1)
-		print("current_node", self.current_node)
+		self.currentNode = self.getIndex(self.currentNodeValue_list, self.currentNode + 1)
+		print("currentNode", self.currentNode)
 		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
 
 		return
 
 
+	def addSpeech(self, newSpeech):
+		self.getCurrentNodeValueList().add(newSpeech)
+
+
 class MemorySpace(MindMap):
 	def update(self):
-		pos = dict([(self.current_list[i], [i, 0]) if i%2==0 else (self.current_list[i], [i, 1]) for i in range(len(self.current_list))])
+		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
 		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.G, pos)
 		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
@@ -113,8 +118,8 @@ def keyboard_input(event):
 	# Left hand for memoryspace
 	# new node
 	if event.key == 'r':
-		speech.read()
-		# memoryspace.addSpeech(speech.read())
+		# speech.read()
+		memoryspace.addSpeech(speech.read())
 	if event.key == 's':
 		memoryspace.left()
 	elif event.key == 'f':
