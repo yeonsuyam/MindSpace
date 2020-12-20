@@ -81,6 +81,28 @@ class MindMap:
 			return []
 
 
+	def addNode(self, newSpeech):
+		if len(self.getCurrentNodeValueList()) == 0:
+			self.G.add_nodes_from([(newSpeech)])
+			self.currentNode = 0
+
+		elif self.currentNode == len(self.getCurrentNodeValueList()) - 1:
+			self.getCurrentNodeValueList().append(newSpeech)
+			self.currentNode += 1
+			leftNodeValue = self.getCurrentNodeValueList()[self.currentNode - 1]
+			self.G.add_edges_from([(leftNodeValue, newSpeech)])
+
+		else:
+			self.getCurrentNodeValueList().insert(self.currentNode + 1, newSpeech)
+			self.currentNode += 1
+			leftNodeValue = self.getCurrentNodeValueList()[self.currentNode - 1]
+			rightNodeValue = self.getCurrentNodeValueList()[self.currentNode + 1]
+			self.G.remove_edge(leftNodeValue, rightNodeValue)
+			self.G.add_edges_from([(leftNodeValue, newSpeech), (newSpeech, rightNodeValue)])
+			
+		return
+
+
 	def left(self):
 		self.currentNode = self.getIndex(self.currentNodeValue_list, self.currentNode - 1)
 	
@@ -138,6 +160,31 @@ class MemorySpace(MindMap):
 		return
 
 
+	def popCurrentNode(self):
+		currentNodeValueList = self.getCurrentNodeValueList()
+		currentNodeValue = currentNodeValueList[self.currentNode]
+		try:
+			leftNodeValue = currentNodeValueList[self.currentNode-1]
+			leftNode = self.currentNode-1
+		except:
+			leftNode = -1
+		try:
+			rightNode = currentNodeValueList[self.currentNode+1]
+			rightNode = self.currentNode+1
+		except:
+			rightNode = -1
+		
+		self.getCurrentNodeValueList().pop(self.currentNode)
+		self.G.remove_node(currentNodeValue)
+
+		if leftNode	!= -1 and rightNode != -1:
+			self.G.add_edge(leftNode, rightNode)
+
+		self.currentNode = leftNode if leftNode != -1 else rightNode
+
+		return currentNodeValue
+
+
 # left hand: sfed, r
 # right hand: jlik, u
 def keyboard_input(event):
@@ -155,10 +202,10 @@ def keyboard_input(event):
 	elif event.key == 'f':
 		memoryspace.right()
 	elif event.key == 'e':
-		memoryspace.up()
 	elif event.key == 'd':
 		memoryspace.down()
 
+		mindmap.addNode(memoryspace.popCurrentNode())
 	# Right hand for mindmaps
 	if event.key == 'j':
 		mindmap.left()
