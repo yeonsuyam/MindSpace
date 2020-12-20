@@ -75,7 +75,10 @@ class MindMap:
 
 
 	def currentNodeName(self):
-		return self.currentNodeValue_list[self.currentNode]
+		if self.currentNode != -1:
+			return self.currentNodeValue_list[self.currentNode]
+		else:
+			return []
 
 
 	def left(self):
