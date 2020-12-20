@@ -130,10 +130,10 @@ class MemorySpace(MindMap):
 			self.currentNode = 0
 
 		else:
-			lastNode = self.getCurrentNodeValueList()[-1]
+			lastNodeValue = self.getCurrentNodeValueList()[-1]
 			self.getCurrentNodeValueList().append(newSpeech)
 			self.currentNode = len(self.getCurrentNodeValueList()) - 1
-			self.G.add_edges_from([(lastNode, newSpeech)])
+			self.G.add_edges_from([(lastNodeValue, newSpeech)])
 
 		return
 
