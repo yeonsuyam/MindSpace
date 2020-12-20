@@ -23,7 +23,7 @@ class MindMap:
 		self.level0 = {"root": []}
 		self.level1 = {}
 		self.level2 = {}
-		# self.level3 = {}
+		self.level3 = {}
 		self.levels = [self.level0, self.level1, self.level2]
 
 		self.currentNodePerLevel = [-1, -1, -1, -1]
@@ -64,6 +64,17 @@ class MindMap:
 		nodeValue = "root"
 
 		for i in range(self.current_level + 1):
+			nodeValueListOfLevel_i = self.levels[i][nodeValue]
+			if self.currentNodePerLevel[i] != -1:
+				nodeValue = nodeValueListOfLevel_i[self.currentNodePerLevel[i]]
+
+		return nodeValueListOfLevel_i
+
+
+	def getLevelNodeValueList(self, level):
+		nodeValue = "root"
+
+		for i in range(self.level + 1):
 			nodeValueListOfLevel_i = self.levels[i][nodeValue]
 			if self.currentNodePerLevel[i] != -1:
 				nodeValue = nodeValueListOfLevel_i[self.currentNodePerLevel[i]]
@@ -151,14 +162,47 @@ class MindMap:
 			return
 
 		self.topG.add_node(self.currentNodeValue())
+
 		self.currentNodePerLevel[self.current_level] = self.currentNode
+		
 		self.current_level += 1
 		self.currentNodeValue_list = self.getCurrentNodeValueList()
-
 		self.currentNode = 0 if len(self.currentNodeValue_list) != 0 else -1
 
 		self.currentG.clear()
-		self.currentG.add_edges_from(self.currentNodeValue_list)
+		if len(self.currentNodeValue_list) == 1:
+			self.currentG.add_nodes_from(self.currentNodeValue_list)
+		else:
+			self.currentG.add_edges_from(self.getCurrentEdges())
+
+		return
+
+
+	def topLevel(self):
+		if self.current_level == 0:
+			print("topLevel: Error")
+			return
+
+		elif self.current_level == 1:
+			self.topG.clear()
+
+		else:
+			parentNodeValueList = self.getLevelNodeValueList(self.current_level-1)
+			parentNodeValue = parentNodeValueList[self.currentNodePerLevel[self.current_level-1]]
+			self.topG.clear()
+			self.topG.add_node(parentNodeValue)
+
+		self.currentNodePerLevel[self.current_level] = self.currentNode
+
+		self.current_level -= 1
+		self.currentNodeValue_list = self.getCurrentNodeValueList()
+		self.currentNode = self.currentNodePerLevel[self.current_level]
+
+		self.currentG.clear()
+		if len(self.currentNodeValue_list) == 1:
+			self.currentG.add_nodes_from(self.currentNodeValue_list)
+		else:
+			self.currentG.add_edges_from(self.getCurrentEdges())
 
 		return
 
@@ -267,6 +311,7 @@ def keyboard_input(event):
 		updateTop = True
 	elif event.key == 'k':
 		mindmap.topLevel()
+		updateTop = True
 
 	plt.clf()
 
