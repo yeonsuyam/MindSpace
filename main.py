@@ -1,5 +1,6 @@
 import networkx as nx
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from itertools import cycle
 from speech import Speech
@@ -40,7 +41,7 @@ class MindMap:
 		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
 
 		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
-		nx.draw_networkx_labels(self.G, pos)
+		nx.draw_networkx_labels(self.G, pos, font_family = 'AppleGothic')
 		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), arrows=False)
 		print("updated MindMap")
 
@@ -140,7 +141,7 @@ class MemorySpace(MindMap):
 		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
 
 		nx.draw_networkx_nodes(self.G, pos, node_color = self.node_colors, node_size = 500)
-		nx.draw_networkx_labels(self.G, pos)
+		nx.draw_networkx_labels(self.G, pos, font_family = 'AppleGothic')
 		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
 		print("updated MemorySpace")
 
@@ -234,6 +235,7 @@ speech = Speech()
 # print(plt.rcParams)
 plt.rcParams['keymap.fullscreen'] = 'ctrl+f'
 plt.rcParams['keymap.save'] = 'ctrl+s'
+mpl.rcParams['axes.unicode_minus'] = False
 
 memoryspace_plt = plt.subplot(1, 2, 1)
 memoryspace_plt.set_ylim(5, -5)
