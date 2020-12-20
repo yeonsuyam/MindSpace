@@ -18,17 +18,17 @@ class MindMap:
 		# self.Glevel3 = nx.Graph()
 		# self.Glevel4 = nx.Graph()
 
-		self.level0 = {"root": ["A", "B", "C", "D"]}
-		self.level1 = {"A": ["a", "b", "c"], "B": ["d", "e"], "C": ["f"]}
+		self.level0 = {"root": []}
+		self.level1 = {}
 		self.level2 = {}
 		# self.level3 = {}
 		self.levels = [self.level0, self.level1, self.level2]
 
-		self.currentNodePerLevel = [0, 0, 0, 0]
+		self.currentNodePerLevel = [-1, -1, -1, -1]
 		self.current_level = 0
 
 		self.currentNodeValue_list = self.getCurrentNodeValueList()
-		self.currentNode = 0
+		self.currentNode = -1
 
 		self.G.add_edges_from(self.getCurrentEdges())
 		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
@@ -66,6 +66,9 @@ class MindMap:
 
 
 	def getIndex(self, l, i):
+		if len(l) == 0: 
+			return -1
+
 		while i >= len(l):
 			i -= len(l)
 
@@ -84,6 +87,7 @@ class MindMap:
 
 	def addNode(self, newSpeech):
 		if len(self.getCurrentNodeValueList()) == 0:
+			self.getCurrentNodeValueList().append(newSpeech)
 			self.G.add_nodes_from([(newSpeech)])
 			self.currentNode = 0
 
@@ -170,7 +174,7 @@ class MemorySpace(MindMap):
 		except:
 			leftNode = -1
 		try:
-			rightNode = currentNodeValueList[self.currentNode+1]
+			rightNodeValue = currentNodeValueList[self.currentNode+1]
 			rightNode = self.currentNode+1
 		except:
 			rightNode = -1
@@ -179,7 +183,7 @@ class MemorySpace(MindMap):
 		self.G.remove_node(currentNodeValue)
 
 		if leftNode	!= -1 and rightNode != -1:
-			self.G.add_edge(leftNode, rightNode)
+			self.G.add_edge(leftNodeValue, rightNodeValue)
 
 		self.currentNode = leftNode if leftNode != -1 else rightNode
 
