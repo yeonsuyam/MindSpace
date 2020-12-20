@@ -50,7 +50,8 @@ class MindMap:
 
 		for i in range(self.current_level + 1):
 			nodeValueListOfLevel_i = self.levels[i][nodeValue]
-			nodeValue = nodeValueListOfLevel_i[self.currentNodePerLevel[i]]
+			if self.currentNodePerLevel[i] != -1:
+				nodeValue = nodeValueListOfLevel_i[self.currentNodePerLevel[i]]
 
 		return nodeValueListOfLevel_i
 
@@ -94,14 +95,14 @@ class MemorySpace(MindMap):
 		# super().__init__()
 		self.G = nx.Graph()
 
-		self.level0 = {"root": ["Hi", "Hello", "Hey", "What's up"]}
+		self.level0 = {"root": []}
 		self.levels = [self.level0]
 
-		self.currentNodePerLevel = [0]
+		self.currentNodePerLevel = [-1]
 		self.current_level = 0
 
 		self.currentNodeValue_list = self.getCurrentNodeValueList()
-		self.currentNode = 0
+		self.currentNode = -1
 
 		self.G.add_edges_from(self.getCurrentEdges())
 		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
@@ -122,7 +123,8 @@ class MemorySpace(MindMap):
 	def addSpeech(self, newSpeech):
 		if len(self.getCurrentNodeValueList()) == 0:
 			self.G.add_nodes_from([(newSpeech)])
-			self.currentNode = 1
+			self.getCurrentNodeValueList().append(newSpeech)
+			self.currentNode = 0
 
 		else:
 			lastNode = self.getCurrentNodeValueList()[-1]
