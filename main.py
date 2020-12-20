@@ -8,7 +8,9 @@ from speech import Speech
 
 class MindMap:
 	def __init__(self):
-		self.G = nx.Graph()
+		self.currentG = nx.Graph()
+		self.topG = nx.Graph()
+		self.bottomG = nx.Graph()
 		# self.Glevel1 = nx.Graph()
 		# self.Glevel1.add_edges_from(
 		# 	[("A", "B"), ("B", "C"), ("C", "D")])
@@ -30,19 +32,19 @@ class MindMap:
 		self.currentNodeValue_list = self.getCurrentNodeValueList()
 		self.currentNode = -1
 
-		self.G.add_edges_from(self.getCurrentEdges())
-		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
+		self.currentG.add_edges_from(self.getCurrentEdges())
+		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.currentG.nodes()]
 
 		self.update()
 
 
 	def update(self):
 		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
-		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
+		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.currentG.nodes()]
 
-		nx.draw_networkx_nodes(self.G, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
-		nx.draw_networkx_labels(self.G, pos, font_family = 'AppleGothic')
-		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), arrows=False)
+		nx.draw_networkx_nodes(self.currentG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
+		nx.draw_networkx_labels(self.currentG, pos, font_family = 'AppleGothic')
+		nx.draw_networkx_edges(self.currentG, pos, edgelist=self.getCurrentEdges(), arrows=False)
 		print("updated MindMap")
 
 
@@ -88,22 +90,22 @@ class MindMap:
 	def addNode(self, newSpeech):
 		if len(self.getCurrentNodeValueList()) == 0:
 			self.getCurrentNodeValueList().append(newSpeech)
-			self.G.add_nodes_from([(newSpeech)])
+			self.currentG.add_nodes_from([(newSpeech)])
 			self.currentNode = 0
 
 		elif self.currentNode == len(self.getCurrentNodeValueList()) - 1:
 			self.getCurrentNodeValueList().append(newSpeech)
 			self.currentNode += 1
 			leftNodeValue = self.getCurrentNodeValueList()[self.currentNode - 1]
-			self.G.add_edges_from([(leftNodeValue, newSpeech)])
+			self.currentG.add_edges_from([(leftNodeValue, newSpeech)])
 
 		else:
 			self.getCurrentNodeValueList().insert(self.currentNode + 1, newSpeech)
 			self.currentNode += 1
 			leftNodeValue = self.getCurrentNodeValueList()[self.currentNode - 1]
 			rightNodeValue = self.getCurrentNodeValueList()[self.currentNode + 1]
-			self.G.remove_edge(leftNodeValue, rightNodeValue)
-			self.G.add_edges_from([(leftNodeValue, newSpeech), (newSpeech, rightNodeValue)])
+			self.currentG.remove_edge(leftNodeValue, rightNodeValue)
+			self.currentG.add_edges_from([(leftNodeValue, newSpeech), (newSpeech, rightNodeValue)])
 			
 		return
 
@@ -123,7 +125,7 @@ class MindMap:
 class MemorySpace(MindMap):
 	def __init__(self):
 		# super().__init__()
-		self.G = nx.Graph()
+		self.currentG = nx.Graph()
 
 		self.level0 = {"root": []}
 		self.levels = [self.level0]
@@ -134,25 +136,25 @@ class MemorySpace(MindMap):
 		self.currentNodeValue_list = self.getCurrentNodeValueList()
 		self.currentNode = -1
 
-		self.G.add_edges_from(self.getCurrentEdges())
-		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
+		self.currentG.add_edges_from(self.getCurrentEdges())
+		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.currentG.nodes()]
 
 		self.update()
 
 
 	def update(self):
 		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
-		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.G.nodes()]
+		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.currentG.nodes()]
 
-		nx.draw_networkx_nodes(self.G, pos, node_color = self.node_colors, node_size = 500)
-		nx.draw_networkx_labels(self.G, pos, font_family = 'AppleGothic')
-		nx.draw_networkx_edges(self.G, pos, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
+		nx.draw_networkx_nodes(self.currentG, pos, node_color = self.node_colors, node_size = 500)
+		nx.draw_networkx_labels(self.currentG, pos, font_family = 'AppleGothic')
+		nx.draw_networkx_edges(self.currentG, pos, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
 		print("updated MemorySpace")
 
 
 	def addSpeech(self, newSpeech):
 		if len(self.getCurrentNodeValueList()) == 0:
-			self.G.add_nodes_from([(newSpeech)])
+			self.currentG.add_nodes_from([(newSpeech)])
 			self.getCurrentNodeValueList().append(newSpeech)
 			self.currentNode = 0
 
@@ -160,7 +162,7 @@ class MemorySpace(MindMap):
 			lastNodeValue = self.getCurrentNodeValueList()[-1]
 			self.getCurrentNodeValueList().append(newSpeech)
 			self.currentNode = len(self.getCurrentNodeValueList()) - 1
-			self.G.add_edges_from([(lastNodeValue, newSpeech)])
+			self.currentG.add_edges_from([(lastNodeValue, newSpeech)])
 
 		return
 
@@ -180,10 +182,10 @@ class MemorySpace(MindMap):
 			rightNode = -1
 		
 		self.getCurrentNodeValueList().pop(self.currentNode)
-		self.G.remove_node(currentNodeValue)
+		self.currentG.remove_node(currentNodeValue)
 
 		if leftNode	!= -1 and rightNode != -1:
-			self.G.add_edge(leftNodeValue, rightNodeValue)
+			self.currentG.add_edge(leftNodeValue, rightNodeValue)
 
 		self.currentNode = leftNode if leftNode != -1 else rightNode
 
