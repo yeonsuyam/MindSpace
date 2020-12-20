@@ -39,7 +39,7 @@ class MindMap:
 
 
 	def updateCurrent(self):
-		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
+		pos = dict([(self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)/2, 2]) if i%2==0 else (self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)//2, -2]) for i in range(len(self.currentNodeValue_list))])
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		nx.draw_networkx_nodes(self.currentG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
@@ -51,7 +51,7 @@ class MindMap:
 
 	def updateTop(self):
 		# TODO: Show header of upper node if it is note "root"
-		pos = dict([(node, [0, -5]) for node in self.topG.nodes()])
+		pos = dict([(node, [0, 5]) for node in self.topG.nodes()])
 		self.node_colors = ['gray' for node in self.topG.nodes()]
 
 		nx.draw_networkx_nodes(self.topG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
@@ -228,7 +228,7 @@ class MemorySpace(MindMap):
 
 
 	def updateCurrent(self):
-		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
+		pos = dict([(self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, -2]) if i%2==0 else (self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, 2]) for i in range(len(self.currentNodeValue_list))])
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		nx.draw_networkx_nodes(self.currentG, pos, node_color = self.node_colors, node_size = 500)
@@ -316,11 +316,13 @@ def keyboard_input(event):
 	plt.clf()
 
 	memoryspace_plt = plt.subplot(1, 2, 1)
-	memoryspace_plt.set_ylim(5, -5)
+	memoryspace_plt.set_xlim(-3, 3)
+	memoryspace_plt.set_ylim(-7, 7)
 	memoryspace.updateCurrent()
 
 	mindmap_plt = plt.subplot(1, 2, 2)
-	mindmap_plt.set_ylim(5, -5)
+	mindmap_plt.set_xlim(-3, 3)
+	mindmap_plt.set_ylim(-7, 7)
 	mindmap.updateCurrent()
 	if updateTop:
 		mindmap.updateTop()		
