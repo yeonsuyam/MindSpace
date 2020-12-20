@@ -96,7 +96,7 @@ class MindMap:
 		if self.currentNode != -1:
 			return self.currentNodeValue_list[self.currentNode]
 		else:
-			return []
+			return -1
 
 
 	def addNode(self, newSpeech):
@@ -125,12 +125,18 @@ class MindMap:
 
 
 	def left(self):
+		if self.currentNode == -1:
+			return
+
 		self.currentNode = self.getIndex(self.currentNodeValue_list, self.currentNode - 1)
 	
 		return
 
 
 	def right(self):
+		if self.currentNode == -1:
+			return
+		
 		self.currentNode = self.getIndex(self.currentNodeValue_list, self.currentNode + 1)
 
 		return
@@ -223,7 +229,7 @@ class MemorySpace(MindMap):
 		if leftNode	!= -1 and rightNode != -1:
 			self.currentG.add_edge(leftNodeValue, rightNodeValue)
 
-		self.currentNode = leftNode if leftNode != -1 else rightNode
+		self.currentNode = leftNode if leftNode != -1 else (rightNode-1)
 
 		return currentNodeValue
 
