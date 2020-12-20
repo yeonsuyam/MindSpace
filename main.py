@@ -35,17 +35,29 @@ class MindMap:
 		self.currentG.add_edges_from(self.getCurrentEdges())
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
-		self.update()
+		self.updateCurrent()
 
 
-	def update(self):
+	def updateCurrent(self):
 		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		nx.draw_networkx_nodes(self.currentG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.currentG, pos, font_family = 'AppleGothic')
 		nx.draw_networkx_edges(self.currentG, pos, edgelist=self.getCurrentEdges(), arrows=False)
-		print("updated MindMap")
+		print("updateCurrent MindMap")
+		print("MindMap", self.currentNodeValue_list, self.currentNode)
+
+
+	def updateTop(self):
+		# TODO: Show header of upper node if it is note "root"
+		pos = dict([(node, [0, -5]) for node in self.topG.nodes()])
+		self.node_colors = ['gray' for node in self.topG.nodes()]
+
+		nx.draw_networkx_nodes(self.topG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
+		nx.draw_networkx_labels(self.topG, pos, font_family = 'AppleGothic')
+		print("updateTop MindMap")
+		print("MindMap", self.currentNodeValue_list, self.currentNode)
 
 
 	def getCurrentNodeValueList(self):
@@ -88,6 +100,8 @@ class MindMap:
 
 
 	def addNode(self, newSpeech):
+		self.levels[self.current_level + 1][newSpeech] = []
+
 		if len(self.getCurrentNodeValueList()) == 0:
 			self.getCurrentNodeValueList().append(newSpeech)
 			self.currentG.add_nodes_from([(newSpeech)])
@@ -122,6 +136,27 @@ class MindMap:
 		return
 
 
+	def bottomLevel(self):
+		if self.currentNode == -1:
+			return
+
+		if self.current_level == 3:
+			print("NOT IMPLEMENTED")
+			return
+
+		self.topG.add_node(self.currentNodeValue())
+		self.currentNodePerLevel[self.current_level] = self.currentNode
+		self.current_level += 1
+		self.currentNodeValue_list = self.getCurrentNodeValueList()
+
+		self.currentNode = 0 if len(self.currentNodeValue_list) != 0 else -1
+
+		self.currentG.clear()
+		self.currentG.add_edges_from(self.currentNodeValue_list)
+
+		return
+
+
 class MemorySpace(MindMap):
 	def __init__(self):
 		# super().__init__()
@@ -139,17 +174,18 @@ class MemorySpace(MindMap):
 		self.currentG.add_edges_from(self.getCurrentEdges())
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
-		self.update()
+		self.updateCurrent()
 
 
-	def update(self):
+	def updateCurrent(self):
 		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		nx.draw_networkx_nodes(self.currentG, pos, node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.currentG, pos, font_family = 'AppleGothic')
 		nx.draw_networkx_edges(self.currentG, pos, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
-		print("updated MemorySpace")
+		print("updateCurrentd MemorySpace")
+		print("MemorySpace", self.currentNodeValue_list, self.currentNode)
 
 
 	def addSpeech(self, newSpeech):
@@ -198,6 +234,8 @@ def keyboard_input(event):
 	global mindmap
 	global memoryspace
 
+	updateTop = False
+
 	# Left hand for memoryspace
 	# new node
 	if event.key == 'r':
@@ -219,19 +257,23 @@ def keyboard_input(event):
 	elif event.key == 'l':
 		mindmap.right()
 	elif event.key == 'i':
-		mindmap.up()
+		mindmap.bottomLevel()
+		updateTop = True
 	elif event.key == 'k':
-		mindmap.down()
+		mindmap.topLevel()
 
 	plt.clf()
 
 	memoryspace_plt = plt.subplot(1, 2, 1)
 	memoryspace_plt.set_ylim(5, -5)
-	memoryspace.update()
-	
+	memoryspace.updateCurrent()
+
 	mindmap_plt = plt.subplot(1, 2, 2)
 	mindmap_plt.set_ylim(5, -5)
-	mindmap.update()
+	mindmap.updateCurrent()
+	if updateTop:
+		mindmap.updateTop()		
+
 	plt.draw()
 
 
