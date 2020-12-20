@@ -33,14 +33,14 @@ class MindMap:
 		self.currentNode = -1
 
 		self.currentG.add_edges_from(self.getCurrentEdges())
-		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.currentG.nodes()]
+		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		self.update()
 
 
 	def update(self):
 		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
-		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.currentG.nodes()]
+		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		nx.draw_networkx_nodes(self.currentG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.currentG, pos, font_family = 'AppleGothic')
@@ -80,7 +80,7 @@ class MindMap:
 		return i
 
 
-	def currentNodeName(self):
+	def currentNodeValue(self):
 		if self.currentNode != -1:
 			return self.currentNodeValue_list[self.currentNode]
 		else:
@@ -137,14 +137,14 @@ class MemorySpace(MindMap):
 		self.currentNode = -1
 
 		self.currentG.add_edges_from(self.getCurrentEdges())
-		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.currentG.nodes()]
+		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		self.update()
 
 
 	def update(self):
 		pos = dict([(self.currentNodeValue_list[i], [i, 0]) if i%2==0 else (self.currentNodeValue_list[i], [i, 1]) for i in range(len(self.currentNodeValue_list))])
-		self.node_colors = ['skyblue' if not node == self.currentNodeName() else 'yellow' for node in self.currentG.nodes()]
+		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		nx.draw_networkx_nodes(self.currentG, pos, node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.currentG, pos, font_family = 'AppleGothic')
