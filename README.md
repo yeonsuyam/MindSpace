@@ -1,5 +1,6 @@
 # MindSpace
 
 ## Environment
-* matplotlib
-* networkx
+* matplotlib - for drawing mindmap
+* networkx - for drawing mindmap
+* pyserial - for Arduino touchpad
