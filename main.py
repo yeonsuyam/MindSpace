@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 from itertools import cycle
 from speech import Speech
 
+from threading import *
+from time import sleep
+import serial
+
 
 class MindMap:
 	def __init__(self):
@@ -328,6 +332,28 @@ def keyboard_input(event):
 
 	plt.draw()
 
+
+def arduino():
+	ser = serial.Serial(
+		# TODO: Check port, baudrate
+		# port='/dev/cu.usbmodem72758601 Serial (Teensy 3.2)',
+		port='/dev/cu.usbmodem72758601',
+		# port='/dev/cu.usbmodem72758601 (Teensy) Serial',
+		baudrate=9600,
+	)
+
+	while True:
+		if ser.readable():
+			res = ser.readline()
+			print(res.decode()[:len(res)-1])
+
+	print('Finish touch input')
+	return
+
+
+Stopped = False
+t = Thread(target=arduino, args=())
+t.start()
 
 speech = Speech()
 
