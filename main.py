@@ -324,8 +324,7 @@ def keyboard_input(event):
 	mindmap_plt.set_xlim(-3, 3)
 	mindmap_plt.set_ylim(-7, 7)
 	mindmap.updateCurrent()
-	if updateTop:
-		mindmap.updateTop()		
+	mindmap.updateTop()		
 
 	plt.draw()
 

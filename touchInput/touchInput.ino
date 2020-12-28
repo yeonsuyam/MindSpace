@@ -86,26 +86,36 @@ void loop()
     Pinnacle_GetAbsolute(&touchData);
 //    ScaleData(&touchData, 1024, 1024);  // Scale coordinates to arbitrary X, Y resolution
           
-    Serial.print(touchData.xValue);
-    Serial.print('\t');
-    Serial.print(touchData.yValue);
-    Serial.print('\t');
-    Serial.print(touchData.zValue);
-    Serial.print('\t');
-    Serial.println(touchData.buttonFlags);
+    //Serial.print(touchData.xValue);
+    //Serial.print('\t');
+    //Serial.print(touchData.yValue);
+    //Serial.print('\t');
+    //Serial.print(touchData.zValue);
+    //Serial.print('\t');
+    //Serial.println(touchData.buttonFlags);
 
-    //list.append[getLocation(touchData.xValue, touchData.yValue)]
-    
+    list.append[getLocation(touchData.xValue, touchData.yValue)]
+    len += 1
   }else 
   {
+    Serial.println(getInputType(&list, len));
     list = []
+    len = 0
   }
   AssertSensorLED(touchData.touchDown);
 }
 
+// return 0: touch / 1: left-touch / 2: right-touch / 3: up-touch / 4: down-touch 
+// 5: left-right / 6: right-left / 7: up-down / 8: down-up
+int getInputType(int * list, len)
+{
+  while len > 0 {
+     
+  }
+}
 
 // return 0: middle / 1: left / 2: right / 3: up / 4: down
-void getLocation(int x, int y)
+int getLocation(int x, int y)
 {
   if (x < 600){
     
