@@ -288,39 +288,39 @@ def keyboard_input(event):
 
 	# Left hand for memoryspace
 	# new node
-	if event.key == 'r':
+	if event.key == 'u':
 		newSpeech = speech.read()
 		if newSpeech != "":
 			memoryspace.addSpeech(newSpeech)
-	if event.key == 's':
-		memoryspace.left()
-	elif event.key == 'f':
-		memoryspace.right()
-	elif event.key == 'e':
-	elif event.key == 'd':
-		memoryspace.down()
-
-		mindmap.addNode(memoryspace.popCurrentNode())
-	# Right hand for mindmaps
 	if event.key == 'j':
-		mindmap.left()
+		memoryspace.left()
 	elif event.key == 'l':
-		mindmap.right()
+		memoryspace.right()
 	elif event.key == 'i':
+		mindmap.addNode(memoryspace.popCurrentNode())
+	# elif event.key == 'd':
+		# memoryspace.addUpperNode()
+	
+	# Right hand for mindmaps
+	if event.key == 's':
+		mindmap.left()
+	elif event.key == 'f':
+		mindmap.right()
+	elif event.key == 'e':
 		mindmap.bottomLevel()
 		updateTop = True
-	elif event.key == 'k':
+	elif event.key == 'd':
 		mindmap.topLevel()
 		updateTop = True
 
 	plt.clf()
 
-	memoryspace_plt = plt.subplot(1, 2, 1)
+	memoryspace_plt = plt.subplot(1, 2, 2)
 	memoryspace_plt.set_xlim(-3, 3)
 	memoryspace_plt.set_ylim(-7, 7)
 	memoryspace.updateCurrent()
 
-	mindmap_plt = plt.subplot(1, 2, 2)
+	mindmap_plt = plt.subplot(1, 2, 1)
 	mindmap_plt.set_xlim(-3, 3)
 	mindmap_plt.set_ylim(-7, 7)
 	mindmap.updateCurrent()
@@ -337,11 +337,11 @@ plt.rcParams['keymap.fullscreen'] = 'ctrl+f'
 plt.rcParams['keymap.save'] = 'ctrl+s'
 mpl.rcParams['axes.unicode_minus'] = False
 
-memoryspace_plt = plt.subplot(1, 2, 1)
+memoryspace_plt = plt.subplot(1, 2, 2)
 memoryspace_plt.set_ylim(5, -5)
 memoryspace = MemorySpace()
 
-mindmap_plt = plt.subplot(1, 2, 2)
+mindmap_plt = plt.subplot(1, 2, 1)
 mindmap_plt.set_ylim(5, -5)
 mindmap = MindMap()
 
