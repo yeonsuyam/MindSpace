@@ -27,8 +27,6 @@ def update(event):
 	fig.canvas.draw_idle()
 
 
-# left hand: sfed, r
-# right hand: jlik, u
 def keyboard_input(key, fig, memoryspace_plt, mindmap_plt):
 	global mindmap
 	global memoryspace
@@ -87,8 +85,6 @@ def arduino(fig, memoryspace_plt, mindmap_plt):
 		keyboard_input('u', fig, memoryspace_plt, mindmap_plt)
 		sleep(2)
 
-
-	print('Finish touch input')
 	return
 
 
@@ -109,7 +105,6 @@ mindmap_plt = fig.add_subplot(1, 2, 1)
 mindmap_plt.set_ylim(5, -5)
 mindmap = MindMap()
 
-Stopped = False
 t = Thread(target=arduino, args=(fig, memoryspace_plt, mindmap_plt))
 t.daemon = False
 t.start()
