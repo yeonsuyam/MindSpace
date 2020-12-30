@@ -34,13 +34,13 @@ class MindMap:
 		self.updateCurrent()
 
 
-	def updateCurrent(self):
+	def updateCurrent(self, axes=None):
 		pos = dict([(self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)/2, 2]) if i%2==0 else (self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)//2, -2]) for i in range(len(self.currentNodeValue_list))])
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
-		nx.draw_networkx_nodes(self.currentG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
-		nx.draw_networkx_labels(self.currentG, pos, font_family = 'AppleGothic')
-		nx.draw_networkx_edges(self.currentG, pos, edgelist=self.getCurrentEdges(), arrows=False)
+		nx.draw_networkx_nodes(self.currentG, pos, ax = axes, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
+		nx.draw_networkx_labels(self.currentG, pos, ax = axes, font_family = 'AppleGothic')
+		nx.draw_networkx_edges(self.currentG, pos, ax = axes, edgelist=self.getCurrentEdges(), arrows=False)
 		print("updateCurrent MindMap")
 		print("MindMap", self.currentNodeValue_list, self.currentNode)
 
@@ -223,13 +223,13 @@ class MemorySpace(MindMap):
 		self.updateCurrent()
 
 
-	def updateCurrent(self):
+	def updateCurrent(self, axes=None):
 		pos = dict([(self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, -2]) if i%2==0 else (self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, 2]) for i in range(len(self.currentNodeValue_list))])
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
-		nx.draw_networkx_nodes(self.currentG, pos, node_color = self.node_colors, node_size = 500)
-		nx.draw_networkx_labels(self.currentG, pos, font_family = 'AppleGothic')
-		nx.draw_networkx_edges(self.currentG, pos, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
+		nx.draw_networkx_nodes(self.currentG, pos, ax=axes, node_color = self.node_colors, node_size = 500)
+		nx.draw_networkx_labels(self.currentG, pos, ax=axes, font_family = 'AppleGothic')
+		nx.draw_networkx_edges(self.currentG, pos, ax=axes, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
 		print("updateCurrentd MemorySpace")
 		print("MemorySpace", self.currentNodeValue_list, self.currentNode)
 

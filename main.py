@@ -11,7 +11,7 @@ import serial
 
 # left hand: sfed, r
 # right hand: jlik, u
-def keyboard_input(event):
+def keyboard_input(key, fig, memoryspace_plt, mindmap_plt):
 	global mindmap
 	global memoryspace
 
@@ -19,48 +19,56 @@ def keyboard_input(event):
 
 	# Left hand for memoryspace
 	# new node
-	if event.key == 'u':
+	if key == 'u':
 		newSpeech = speech.read()
 		if newSpeech != "":
 			memoryspace.addSpeech(newSpeech)
-	if event.key == 'j':
+	if key == 'j':
 		memoryspace.left()
-	elif event.key == 'l':
+	elif key == 'l':
 		memoryspace.right()
-	elif event.key == 'i':
+	elif key == 'i':
 		mindmap.addNode(memoryspace.popCurrentNode())
 	# elif event.key == 'd':
 		# memoryspace.addUpperNode()
 	
 	# Right hand for mindmaps
-	if event.key == 's':
+	if key == 's':
 		mindmap.left()
-	elif event.key == 'f':
+	elif key == 'f':
 		mindmap.right()
-	elif event.key == 'e':
+	elif key == 'e':
 		mindmap.bottomLevel()
 		updateTop = True
-	elif event.key == 'd':
+	elif key == 'd':
 		mindmap.topLevel()
 		updateTop = True
 
-	plt.clf()
+	# plt.clf()
 
-	memoryspace_plt = plt.subplot(1, 2, 2)
+	# memoryspace_plt = plt.subplot(1, 2, 2)
+	memoryspace_plt.clear()
 	memoryspace_plt.set_xlim(-3, 3)
 	memoryspace_plt.set_ylim(-7, 7)
-	memoryspace.updateCurrent()
+	memoryspace_plt.plot()
+	memoryspace.updateCurrent(memoryspace_plt)
 
-	mindmap_plt = plt.subplot(1, 2, 1)
+
+	# mindmap_plt = plt.subplot(1, 2, 1)
+	mindmap_plt.clear()
 	mindmap_plt.set_xlim(-3, 3)
 	mindmap_plt.set_ylim(-7, 7)
 	mindmap.updateCurrent()
-	mindmap.updateTop()		
+	mindmap.updateTop()
 
-	plt.draw()
+	# plt.draw()
+	sleep(1)
+	fig.canvas.draw_idle()
+
+	return
 
 
-def arduino():
+def arduino(fig, memoryspace_plt, mindmap_plt):
 	ser = serial.Serial(
 		# TODO: Check port, baudrate
 		# port='/dev/cu.usbmodem72758601 Serial (Teensy 3.2)',
@@ -69,18 +77,21 @@ def arduino():
 		baudrate=9600,
 	)
 
-	while True:
-		if ser.readable():
-			res = ser.readline()
-			print(res.decode()[:len(res)-1])
+	# while True:
+	# 	if ser.readable():
+	# 		print("readable")
+	# 		res = ser.readline()
+	# 		res = res.decode()[:len(res)-1]
+	# 		keyboard_input('u', fig, memoryspace_plt, mindmap_plt)
+			
+	for i in range(3):
+		keyboard_input('u', fig, memoryspace_plt, mindmap_plt)
+		sleep(2)
+
 
 	print('Finish touch input')
 	return
 
-
-Stopped = False
-t = Thread(target=arduino, args=())
-t.start()
 
 speech = Speech()
 
@@ -90,13 +101,20 @@ plt.rcParams['keymap.fullscreen'] = 'ctrl+f'
 plt.rcParams['keymap.save'] = 'ctrl+s'
 mpl.rcParams['axes.unicode_minus'] = False
 
-memoryspace_plt = plt.subplot(1, 2, 2)
+fig = plt.figure()
+memoryspace_plt = fig.add_subplot(1, 2, 2)
 memoryspace_plt.set_ylim(5, -5)
 memoryspace = MemorySpace()
 
-mindmap_plt = plt.subplot(1, 2, 1)
+mindmap_plt = fig.add_subplot(1, 2, 1)
 mindmap_plt.set_ylim(5, -5)
 mindmap = MindMap()
 
-plt.gcf().canvas.mpl_connect('key_press_event', keyboard_input)
-plt.show()
+Stopped = False
+t = Thread(target=arduino, args=(fig, memoryspace_plt, mindmap_plt))
+t.daemon = False
+t.start()
+
+
+# plt.gcf().canvas.mpl_connect('key_press_event', keyboard_input)
+plt.show(block=True)
