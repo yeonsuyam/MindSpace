@@ -7,6 +7,24 @@ from mindmap import MindMap, MemorySpace
 from threading import *
 from time import sleep
 import serial
+import keyboard
+
+
+def update(event):
+	memoryspace_plt.clear()
+	memoryspace_plt.set_xlim(-3, 3)
+	memoryspace_plt.set_ylim(-7, 7)
+	memoryspace_plt.plot()
+	memoryspace.updateCurrent(memoryspace_plt)
+
+
+	mindmap_plt.clear()
+	mindmap_plt.set_xlim(-3, 3)
+	mindmap_plt.set_ylim(-7, 7)
+	mindmap.updateCurrent()
+	mindmap.updateTop()
+
+	fig.canvas.draw_idle()
 
 
 # left hand: sfed, r
@@ -44,27 +62,8 @@ def keyboard_input(key, fig, memoryspace_plt, mindmap_plt):
 		mindmap.topLevel()
 		updateTop = True
 
-	# plt.clf()
-
-	# memoryspace_plt = plt.subplot(1, 2, 2)
-	memoryspace_plt.clear()
-	memoryspace_plt.set_xlim(-3, 3)
-	memoryspace_plt.set_ylim(-7, 7)
-	memoryspace_plt.plot()
-	memoryspace.updateCurrent(memoryspace_plt)
-
-
-	# mindmap_plt = plt.subplot(1, 2, 1)
-	mindmap_plt.clear()
-	mindmap_plt.set_xlim(-3, 3)
-	mindmap_plt.set_ylim(-7, 7)
-	mindmap.updateCurrent()
-	mindmap.updateTop()
-
-	# plt.draw()
-	sleep(1)
-	fig.canvas.draw_idle()
-
+	keyboard.press_and_release('enter') # To call update function on main thread
+	
 	return
 
 
@@ -115,6 +114,5 @@ t = Thread(target=arduino, args=(fig, memoryspace_plt, mindmap_plt))
 t.daemon = False
 t.start()
 
-
-# plt.gcf().canvas.mpl_connect('key_press_event', keyboard_input)
+plt.gcf().canvas.mpl_connect('key_press_event', update)
 plt.show(block=True)
