@@ -56,6 +56,16 @@ class MindMap:
 		print("MindMap", self.currentNodeValue_list, self.currentNode)
 
 
+	def redrawCurrent(self):
+		self.currentG.clear()
+		if len(self.currentNodeValue_list) == 1:
+			self.currentG.add_nodes_from(self.currentNodeValue_list)
+		else:
+			self.currentG.add_edges_from(self.getCurrentEdges())
+
+		return
+
+
 	def getCurrentNodeValueList(self):
 		nodeValue = "root"
 
@@ -201,12 +211,8 @@ class MindMap:
 		self.currentNodeValue_list = self.getCurrentNodeValueList()
 		self.currentNode = self.currentNodePerLevel[self.current_level]
 
-		self.currentG.clear()
-		if len(self.currentNodeValue_list) == 1:
-			self.currentG.add_nodes_from(self.currentNodeValue_list)
-		else:
-			self.currentG.add_edges_from(self.getCurrentEdges())
-
+		self.redrawCurrent()
+		
 		return
 
 
