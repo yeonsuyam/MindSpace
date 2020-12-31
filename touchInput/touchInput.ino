@@ -78,6 +78,12 @@ void setup()
   Pinnacle_Init();
 }
 
+int len = 0;
+int xMax = 0; int xMin = 9999;
+int yMax = 0; int yMin = 9999;
+int xValue[20];
+int yValue[20];
+
 // loop() continuously checks to see if data-ready (DR) is high. If so, reads and reports touch data to terminal.
 void loop()
 {
@@ -85,43 +91,49 @@ void loop()
   {    
     Pinnacle_GetAbsolute(&touchData);
 //    ScaleData(&touchData, 1024, 1024);  // Scale coordinates to arbitrary X, Y resolution
-          
-    //Serial.print(touchData.xValue);
-    //Serial.print('\t');
-    //Serial.print(touchData.yValue);
-    //Serial.print('\t');
-    //Serial.print(touchData.zValue);
-    //Serial.print('\t');
-    //Serial.println(touchData.buttonFlags);
+    
+    if (touchData.xValue == 0 && len > 0){
+      if (max(xMax-xMin, yMax-yMin) < 30){
+        Serial.println("TOUCH\n");
+      } else {
+        if ((xMax-xMin) > (yMax-yMin)){
+          if (xValue[len-1] - xValue[0] > 0){
+            Serial.println("SWIPE UP\n");
+          } else {
+            Serial.println("SWIPE DOWN\n");
+          }
+        }else{
+          if (yValue[len-1] - yValue[0] > 0){
+            Serial.println("SWIPE RIGHT\n");
+          } else {
+            Serial.println("SWIPE LEFT\n");
+          }
+        }
+      }
+      
+      xMax = 0; xMin = 9999;
+      yMax = 0; yMin = 9999;
+      len = 0;
+      return;
+    }
+    
+    if (touchData.zValue < 10){
+      return;
+    }
 
-    list.append[getLocation(touchData.xValue, touchData.yValue)]
-    len += 1
-  }else 
-  {
-    Serial.println(getInputType(&list, len));
-    list = []
-    len = 0
+    if (len >= 20){
+      return;
+    }
+    xMin = min(xMin, touchData.xValue);
+    yMin = min(yMin, touchData.yValue);
+    xMax = max(xMax, touchData.xValue);
+    yMax = max(yMax, touchData.yValue);
+    
+    xValue[len] = touchData.xValue;
+    yValue[len] = touchData.yValue;
+    len += 1;
   }
   AssertSensorLED(touchData.touchDown);
-}
-
-// return 0: touch / 1: left-touch / 2: right-touch / 3: up-touch / 4: down-touch 
-// 5: left-right / 6: right-left / 7: up-down / 8: down-up
-int getInputType(int * list, len)
-{
-  while len > 0 {
-     
-  }
-}
-
-// return 0: middle / 1: left / 2: right / 3: up / 4: down
-int getLocation(int x, int y)
-{
-  if (x < 600){
-    
-  } else {
-    
-  }
 }
 
 
