@@ -30,34 +30,40 @@ import keyboard
 def keyboard_input(event):
 	global mindmap
 	global memoryspace
+	global swipeFlag
 
 	updateTop = False
 
 	# Left hand for memoryspace
 	# new node
-	if event.key == 'u':
+	if event.key == 'k':
+		swipeFlag = True
+	elif event.key == 'u':
 		newSpeech = speech.read()
 		if newSpeech != "":
 			memoryspace.addSpeech(newSpeech)
-	if event.key == 'j':
-		memoryspace.left()
+	elif event.key == 'j':
+		memoryspace.toLeftNode()
 	elif event.key == 'l':
 		memoryspace.right()
 	elif event.key == 'i':
-		mindmap.addNode(memoryspace.popCurrentNode())
+		if swipeFlag:
+			mindmap.addNodeToBottomLevel(memoryspace.popCurrentNode())
+		else:
+			mindmap.addNode(memoryspace.popCurrentNode())
 	# elif event.key == 'd':
 		# memoryspace.addUpperNode()
 	
 	# Right hand for mindmaps
 	if event.key == 's':
-		mindmap.left()
+		mindmap.toLeftNode()
 	elif event.key == 'f':
-		mindmap.right()
+		mindmap.toRightNode()
 	elif event.key == 'e':
 		mindmap.bottomLevel()
 		updateTop = True
 	elif event.key == 'd':
-		mindmap.topLevel()
+		mindmap.toTopLevel()
 		updateTop = True
 
 	memoryspace_plt.clear()
@@ -91,9 +97,9 @@ def keyboard_input(event):
 # 		if newSpeech != "":
 # 			memoryspace.addSpeech(newSpeech)
 # 	if key == 'j':
-# 		memoryspace.left()
+# 		memoryspace.toLeftNode()
 # 	elif key == 'l':
-# 		memoryspace.right()
+# 		memoryspace.toRightNode()
 # 	elif key == 'i':
 # 		mindmap.addNode(memoryspace.popCurrentNode())
 # 	# elif event.key == 'd':
@@ -101,14 +107,14 @@ def keyboard_input(event):
 	
 # 	# Right hand for mindmaps
 # 	if key == 's':
-# 		mindmap.left()
+# 		mindmap.toLeftNode()
 # 	elif key == 'f':
-# 		mindmap.right()
+# 		mindmap.toRightNode()
 # 	elif key == 'e':
 # 		mindmap.bottomLevel()
 # 		updateTop = True
 # 	elif key == 'd':
-# 		mindmap.topLevel()
+# 		mindmap.toTopLevel()
 # 		updateTop = True
 
 # 	keyboard.press_and_release('enter') # To call update function on main thread
@@ -150,6 +156,8 @@ mindmap_plt = fig.add_subplot(1, 2, 1)
 mindmap_plt.set_xlim(-3, 3)
 mindmap_plt.set_ylim(-7, 7)
 mindmap = MindMap()
+
+swipeFlag = False
 
 # t = Thread(target=arduino, args=(fig, memoryspace_plt, mindmap_plt))
 # t.daemon = False

@@ -131,7 +131,14 @@ class MindMap:
 		return
 
 
-	def left(self):
+	def addNodeToBottomLevel(self, newSpeech):
+		self.toBottomLevel()
+		self.currentNode = len(self.currentNodeValue_list) - 1
+		self.addNode()
+
+		return
+
+	def toLeftNode(self):
 		if self.currentNode == -1:
 			return
 
@@ -140,7 +147,7 @@ class MindMap:
 		return
 
 
-	def right(self):
+	def toRightNode(self):
 		if self.currentNode == -1:
 			return
 		
@@ -149,7 +156,7 @@ class MindMap:
 		return
 
 
-	def bottomLevel(self):
+	def toBottomLevel(self):
 		if self.currentNode == -1:
 			return
 
@@ -174,7 +181,7 @@ class MindMap:
 		return
 
 
-	def topLevel(self):
+	def toTopLevel(self):
 		if self.current_level == 0:
 			print("topLevel: Error")
 			return
