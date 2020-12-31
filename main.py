@@ -51,6 +51,9 @@ def keyboard_input(event):
 			mindmap.addNodeToBottomLevel(memoryspace.popCurrentNode())
 		else:
 			mindmap.addNode(memoryspace.popCurrentNode())
+			swipeFlag = False
+		# else:
+			# mindmap.addNode(memoryspace.popCurrentNode())
 	# elif event.key == 'd':
 		# memoryspace.addUpperNode()
 	
