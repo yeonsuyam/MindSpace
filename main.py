@@ -61,7 +61,7 @@ def keyboard_input(event):
 	elif event.key == 'f':
 		mindmap.toRightNode()
 	elif event.key == 'e':
-		mindmap.bottomLevel()
+		mindmap.toBottomLevel()
 		updateTop = True
 	elif event.key == 'd':
 		mindmap.toTopLevel()
@@ -112,7 +112,7 @@ def keyboard_input(event):
 # 	elif key == 'f':
 # 		mindmap.toRightNode()
 # 	elif key == 'e':
-# 		mindmap.bottomLevel()
+# 		mindmap.toBottomLevel()
 # 		updateTop = True
 # 	elif key == 'd':
 # 		mindmap.toTopLevel()
