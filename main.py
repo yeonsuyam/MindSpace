@@ -49,8 +49,6 @@ def keyboard_input(event):
 	elif event.key == 'i':
 		if swipeFlag:
 			mindmap.addNodeToBottomLevel(memoryspace.popCurrentNode())
-		else:
-			mindmap.addNode(memoryspace.popCurrentNode())
 			swipeFlag = False
 		# else:
 			# mindmap.addNode(memoryspace.popCurrentNode())
