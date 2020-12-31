@@ -45,7 +45,7 @@ def keyboard_input(event):
 	elif event.key == 'j':
 		memoryspace.toLeftNode()
 	elif event.key == 'l':
-		memoryspace.right()
+		memoryspace.toRightNode()
 	elif event.key == 'i':
 		if swipeFlag:
 			mindmap.addNodeToBottomLevel(memoryspace.popCurrentNode())
