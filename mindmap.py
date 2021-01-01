@@ -57,6 +57,7 @@ class MindMap:
 
 
 	def redrawCurrent(self):
+		self.currentNodeValue_list = self.getCurrentNodeValueList()
 		self.currentG.clear()
 		if len(self.currentNodeValue_list) == 1:
 			self.currentG.add_nodes_from(self.currentNodeValue_list)
@@ -208,7 +209,6 @@ class MindMap:
 		self.currentNodePerLevel[self.current_level] = self.currentNode
 
 		self.current_level -= 1
-		self.currentNodeValue_list = self.getCurrentNodeValueList()
 		self.currentNode = self.currentNodePerLevel[self.current_level]
 
 		self.redrawCurrent()
