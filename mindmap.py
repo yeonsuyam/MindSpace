@@ -89,6 +89,15 @@ class MindMap:
 		return nodeValueListOfLevel_i
 
 
+	def getKeyOfTopLevel(self):
+		if self.current_level == 0:
+			keyOfTopLevel = "root"
+		else:
+			keyOfTopLevel = self.getLevelNodeValueList(self.current_level-1)[self.currentNodePerLevel[self.current_level-1]]
+		
+		return keyOfTopLevel
+
+
 	def getCurrentEdges(self):
 		edges = []
 		for i in range(len(self.currentNodeValue_list) - 1):
@@ -148,6 +157,43 @@ class MindMap:
 		self.addNode(newSpeech)
 
 		return
+
+
+	def moveNodeToLeft(self):
+		keyOfTopLevel = self.getKeyOfTopLevel()
+		dictOfCurrentLevel = self.levels[self.current_level]
+
+		l = self.getCurrentNodeValueList()
+		x = self.currentNode
+
+		if x == 0:
+			dictOfCurrentLevel[keyOfTopLevel] = l[x+1:] + [l[x]]
+		else:
+			dictOfCurrentLevel[keyOfTopLevel] = l[:x-1] + [l[x]] + l[x-1:x] + l[x+1:]
+
+		self.currentNode = self.getIndex(self.currentNodeValue_list, self.currentNode - 1)
+		self.redrawCurrent()
+
+		return
+
+
+	def moveNodeToRight(self):
+		keyOfTopLevel = self.getKeyOfTopLevel()
+		dictOfCurrentLevel = self.levels[self.current_level]
+
+		l = self.getCurrentNodeValueList()
+		x = self.currentNode
+
+		if x == len(l) - 1:
+			dictOfCurrentLevel[keyOfTopLevel] = [l[x]] + l[:x]	
+		else:
+			dictOfCurrentLevel[keyOfTopLevel] = l[:x] + l[x+1:x+2] + [l[x]] + l[x+2:]
+
+		self.currentNode = self.getIndex(self.currentNodeValue_list, self.currentNode + 1)
+		self.redrawCurrent()
+
+		return
+
 
 	def toLeftNode(self):
 		if self.currentNode == -1:

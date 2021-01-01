@@ -31,6 +31,7 @@ def keyboard_input(event):
 	global mindmap
 	global memoryspace
 	global swipeFlag
+	global moveNodeFlag
 
 	updateTop = False
 
@@ -45,6 +46,7 @@ def keyboard_input(event):
 	elif event.key == 'j':
 		if swipeFlag:
 			mindmap.addNode(memoryspace.popCurrentNode())
+			moveNodeFlag = True
 			swipeFlag = False
 		else:
 			memoryspace.toLeftNode()
@@ -53,6 +55,7 @@ def keyboard_input(event):
 	elif event.key == 'i':
 		if swipeFlag:
 			mindmap.addNodeToBottomLevel(memoryspace.popCurrentNode())
+			moveNodeFlag = True
 			swipeFlag = False
 		# else:
 			# mindmap.addNode(memoryspace.popCurrentNode())
@@ -60,10 +63,19 @@ def keyboard_input(event):
 		# memoryspace.addUpperNode()
 	
 	# Right hand for mindmaps
-	if event.key == 's':
-		mindmap.toLeftNode()
+	if event.key == 'r': 
+		if moveNodeFlag:
+			moveNodeFlag = False
+	elif event.key == 's':
+		if moveNodeFlag:
+			mindmap.moveNodeToLeft()
+		else:
+			mindmap.toLeftNode()
 	elif event.key == 'f':
-		mindmap.toRightNode()
+		if moveNodeFlag:
+			mindmap.moveNodeToRight()
+		else:
+			mindmap.toRightNode()
 	elif event.key == 'e':
 		mindmap.toBottomLevel()
 		updateTop = True
@@ -163,6 +175,7 @@ mindmap_plt.set_ylim(-7, 7)
 mindmap = MindMap()
 
 swipeFlag = False
+moveNodeFlag = False
 
 # t = Thread(target=arduino, args=(fig, memoryspace_plt, mindmap_plt))
 # t.daemon = False
