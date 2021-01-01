@@ -43,7 +43,11 @@ def keyboard_input(event):
 		if newSpeech != "":
 			memoryspace.addSpeech(newSpeech)
 	elif event.key == 'j':
-		memoryspace.toLeftNode()
+		if swipeFlag:
+			mindmap.addNode(memoryspace.popCurrentNode())
+			swipeFlag = False
+		else:
+			memoryspace.toLeftNode()
 	elif event.key == 'l':
 		memoryspace.toRightNode()
 	elif event.key == 'i':
