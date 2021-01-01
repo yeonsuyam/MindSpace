@@ -145,7 +145,7 @@ class MindMap:
 	def addNodeToBottomLevel(self, newSpeech):
 		self.toBottomLevel()
 		self.currentNode = len(self.currentNodeValue_list) - 1
-		self.addNode()
+		self.addNode(newSpeech)
 
 		return
 
