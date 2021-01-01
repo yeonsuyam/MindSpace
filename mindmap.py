@@ -20,7 +20,8 @@ class MindMap:
 		self.level1 = {}
 		self.level2 = {}
 		self.level3 = {}
-		self.levels = [self.level0, self.level1, self.level2]
+		self.level4 = {}
+		self.levels = [self.level0, self.level1, self.level2, self.level3, self.level4]
 
 		self.currentNodePerLevel = [-1, -1, -1, -1]
 		self.current_level = 0
