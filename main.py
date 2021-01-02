@@ -33,7 +33,6 @@ def keyboard_input(event):
 	global swipeFlag
 	global moveNodeFlag
 
-	updateTop = False
 	print()
 
 	# Right hand for MemorySpace
@@ -83,11 +82,9 @@ def keyboard_input(event):
 	elif event.key == 'e':
 		print("e")
 		mindmap.toTopLevel()
-		updateTop = True
 	elif event.key == 'c':
 		print("c")
 		mindmap.toBottomLevel()
-		updateTop = True
 
 	memoryspace_plt.clear()
 	memoryspace_plt.set_xlim(-3, 3)
@@ -109,8 +106,6 @@ def keyboard_input(event):
 # def keyboard_input(key, fig, memoryspace_plt, mindmap_plt):
 # 	global mindmap
 # 	global memoryspace
-
-# 	updateTop = False
 
 # 	# Left hand for memoryspace
 # 	# new node
@@ -134,10 +129,8 @@ def keyboard_input(event):
 # 		mindmap.toRightNode()
 # 	elif key == 'e':
 # 		mindmap.toBottomLevel()
-# 		updateTop = True
 # 	elif key == 'd':
 # 		mindmap.toTopLevel()
-# 		updateTop = True
 
 # 	keyboard.press_and_release('enter') # To call update function on main thread
 	
