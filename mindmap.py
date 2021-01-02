@@ -46,7 +46,7 @@ class MindMap:
 		print("MindMap", "currentLevel: ", self.current_level, self.currentNodeValue_list, "currentNode: ", self.currentNode)
 
 		return
-		
+
 
 	def updateTop(self):
 		# TODO: Show header of upper node if it is note "root"
@@ -130,6 +130,10 @@ class MindMap:
 
 
 	def addNode(self, newSpeech):
+		if newSpeech == None:
+			print("Error: No node to add")
+			return
+		
 		self.levels[self.current_level + 1][newSpeech] = []
 
 		if len(self.getCurrentNodeValueList()) == 0:
@@ -155,6 +159,10 @@ class MindMap:
 
 
 	def addNodeToBottomLevel(self, newSpeech):
+		if newSpeech == None:
+			print("Error: No node to add")
+			return
+
 		self.toBottomLevel()
 		self.currentNode = len(self.currentNodeValue_list) - 1
 		self.addNode(newSpeech)
@@ -293,7 +301,6 @@ class MemorySpace(MindMap):
 		nx.draw_networkx_nodes(self.currentG, pos, ax=axes, node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.currentG, pos, ax=axes, font_family = 'AppleGothic')
 		nx.draw_networkx_edges(self.currentG, pos, ax=axes, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
-		# print("updateCurrent MemorySpace")
 		print("MemorySpace", self.currentNodeValue_list, "currentNode: ", self.currentNode)
 
 
@@ -314,7 +321,11 @@ class MemorySpace(MindMap):
 
 	def popCurrentNode(self):
 		currentNodeValueList = self.getCurrentNodeValueList()
-		currentNodeValue = currentNodeValueList[self.currentNode]
+		try:
+			currentNodeValue = currentNodeValueList[self.currentNode]
+		except:
+			return
+
 		try:
 			leftNodeValue = currentNodeValueList[self.currentNode-1]
 			leftNode = self.currentNode-1
