@@ -37,7 +37,7 @@ def keyboard_input(event):
 
 	# Right hand for MemorySpace
 	if event.key == 'k':
-		swipeFlag = True
+		swipeFlag = 2
 	elif event.key == 'u':
 		print("u")
 		newSpeech = speech.read()
@@ -62,7 +62,7 @@ def keyboard_input(event):
 	
 	# Left hand for MindMaps
 	if event.key == 'd': 
-		moveNodeFlag = True
+		moveNodeFlag = 2
 	elif event.key == 's':
 		if moveNodeFlag:
 			print("ds")
@@ -99,6 +99,11 @@ def keyboard_input(event):
 	mindmap.updateTop()
 
 	fig.canvas.draw_idle()
+
+	if swipeFlag != 0:
+		swipeFlag -= 1
+	if moveNodeFlag != 0:
+		moveNodeFlag -= 1
 	
 	return
 
