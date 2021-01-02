@@ -42,9 +42,11 @@ class MindMap:
 		nx.draw_networkx_nodes(self.currentG, pos, ax = axes, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.currentG, pos, ax = axes, font_family = 'AppleGothic')
 		nx.draw_networkx_edges(self.currentG, pos, ax = axes, edgelist=self.getCurrentEdges(), arrows=False)
-		print("updateCurrent MindMap")
-		print("MindMap", self.currentNodeValue_list, self.currentNode)
+		# print("updateCurrent MindMap")
+		print("MindMap", "currentLevel: ", self.current_level, self.currentNodeValue_list, "currentNode: ", self.currentNode)
 
+		return
+		
 
 	def updateTop(self):
 		# TODO: Show header of upper node if it is note "root"
@@ -53,8 +55,8 @@ class MindMap:
 
 		nx.draw_networkx_nodes(self.topG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.topG, pos, font_family = 'AppleGothic')
-		print("updateTop MindMap")
-		print("MindMap", self.currentNodeValue_list, self.currentNode)
+		
+		return
 
 
 	def redrawCurrent(self):
@@ -290,8 +292,8 @@ class MemorySpace(MindMap):
 		nx.draw_networkx_nodes(self.currentG, pos, ax=axes, node_color = self.node_colors, node_size = 500)
 		nx.draw_networkx_labels(self.currentG, pos, ax=axes, font_family = 'AppleGothic')
 		nx.draw_networkx_edges(self.currentG, pos, ax=axes, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
-		print("updateCurrentd MemorySpace")
-		print("MemorySpace", self.currentNodeValue_list, self.currentNode)
+		# print("updateCurrent MemorySpace")
+		print("MemorySpace", self.currentNodeValue_list, "currentNode: ", self.currentNode)
 
 
 	def addSpeech(self, newSpeech):

@@ -4,5 +4,5 @@ class Speech:
 
 	def read(self):
 		line = self.f.readline()
-		print(line)
+		# print(line)
 		return line
