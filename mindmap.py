@@ -84,7 +84,7 @@ class MindMap:
 	def getLevelNodeValueList(self, level):
 		nodeValue = "root"
 
-		for i in range(self.level + 1):
+		for i in range(level + 1):
 			nodeValueListOfLevel_i = self.levels[i][nodeValue]
 			if self.currentNodePerLevel[i] != -1:
 				nodeValue = nodeValueListOfLevel_i[self.currentNodePerLevel[i]]
