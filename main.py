@@ -71,9 +71,10 @@ def keyboard_input(event):
 		else:
 			mindmap.toRightNode()
 	elif event.key == 'e':
-		mindmap.toBottomLevel()
-		updateTop = True
 		mindmap.toTopLevel()
+		updateTop = True
+	elif event.key == 'c':
+		mindmap.toBottomLevel()
 		updateTop = True
 
 	memoryspace_plt.clear()
