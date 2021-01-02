@@ -37,8 +37,8 @@ class MindMap:
 		self.updateCurrent()
 
 
-		pos = dict([(self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)/2, 2]) if i%2==0 else (self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)//2, -2]) for i in range(len(self.currentNodeValue_list))])
 	def updateCurrent(self):
+		pos = self.getPos(self.currentNodeValue_list)
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		nx.draw_networkx_nodes(self.currentG, pos, ax = self.axes, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 2000)
@@ -71,6 +71,10 @@ class MindMap:
 			self.currentG.add_edges_from(self.getCurrentEdges())
 
 		return
+
+
+	def getPos(self, l):
+		return dict([(l[i], [i - (len(l)-1)/2.0, 2]) if i%2==0 else (l[i], [i - (len(l)-1)/2.0, -2]) for i in range(len(l))])
 
 
 	def getCurrentNodeValueList(self):
@@ -299,8 +303,8 @@ class MemorySpace(MindMap):
 		self.updateCurrent()
 
 
-		pos = dict([(self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, -2]) if i%2==0 else (self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, 2]) for i in range(len(self.currentNodeValue_list))])
 	def updateCurrent(self):
+		pos = self.getPos(self.currentNodeValue_list)
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
 		nx.draw_networkx_nodes(self.currentG, pos, ax=self.axes, node_color = self.node_colors, node_size = 2000)
