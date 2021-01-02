@@ -46,7 +46,6 @@ def keyboard_input(event):
 	elif event.key == 'j':
 		if swipeFlag:
 			mindmap.addNode(memoryspace.popCurrentNode())
-			moveNodeFlag = True
 			swipeFlag = False
 		else:
 			memoryspace.toLeftNode()
@@ -55,7 +54,6 @@ def keyboard_input(event):
 	elif event.key == 'i':
 		if swipeFlag:
 			mindmap.addNodeToBottomLevel(memoryspace.popCurrentNode())
-			moveNodeFlag = True
 			swipeFlag = False
 		# else:
 			# mindmap.addNode(memoryspace.popCurrentNode())
@@ -63,23 +61,23 @@ def keyboard_input(event):
 		# memoryspace.addUpperNode()
 	
 	# Right hand for mindmaps
-	if event.key == 'r': 
-		if moveNodeFlag:
-			moveNodeFlag = False
+	if event.key == 'd': 
+		moveNodeFlag = True
 	elif event.key == 's':
 		if moveNodeFlag:
 			mindmap.moveNodeToLeft()
+			moveNodeFlag = False
 		else:
 			mindmap.toLeftNode()
 	elif event.key == 'f':
 		if moveNodeFlag:
 			mindmap.moveNodeToRight()
+			moveNodeFlag = False
 		else:
 			mindmap.toRightNode()
 	elif event.key == 'e':
 		mindmap.toBottomLevel()
 		updateTop = True
-	elif event.key == 'd':
 		mindmap.toTopLevel()
 		updateTop = True
 
