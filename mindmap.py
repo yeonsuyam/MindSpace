@@ -39,7 +39,7 @@ class MindMap:
 		pos = dict([(self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)/2, 2]) if i%2==0 else (self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)//2, -2]) for i in range(len(self.currentNodeValue_list))])
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
-		nx.draw_networkx_nodes(self.currentG, pos, ax = axes, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
+		nx.draw_networkx_nodes(self.currentG, pos, ax = axes, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 2000)
 		nx.draw_networkx_labels(self.currentG, pos, ax = axes, font_family = 'AppleGothic')
 		nx.draw_networkx_edges(self.currentG, pos, ax = axes, edgelist=self.getCurrentEdges(), arrows=False)
 		# print("updateCurrent MindMap")
@@ -53,7 +53,7 @@ class MindMap:
 		pos = dict([(node, [0, 5]) for node in self.topG.nodes()])
 		self.node_colors = ['gray' for node in self.topG.nodes()]
 
-		nx.draw_networkx_nodes(self.topG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 500)
+		nx.draw_networkx_nodes(self.topG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 2000)
 		nx.draw_networkx_labels(self.topG, pos, font_family = 'AppleGothic')
 		
 		return
@@ -298,7 +298,7 @@ class MemorySpace(MindMap):
 		pos = dict([(self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, -2]) if i%2==0 else (self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, 2]) for i in range(len(self.currentNodeValue_list))])
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
-		nx.draw_networkx_nodes(self.currentG, pos, ax=axes, node_color = self.node_colors, node_size = 500)
+		nx.draw_networkx_nodes(self.currentG, pos, ax=axes, node_color = self.node_colors, node_size = 2000)
 		nx.draw_networkx_labels(self.currentG, pos, ax=axes, font_family = 'AppleGothic')
 		nx.draw_networkx_edges(self.currentG, pos, ax=axes, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
 		print("MemorySpace", self.currentNodeValue_list, "currentNode: ", self.currentNode)

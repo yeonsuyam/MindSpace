@@ -166,7 +166,7 @@ plt.rcParams['keymap.fullscreen'] = 'ctrl+f'
 plt.rcParams['keymap.save'] = 'ctrl+s'
 mpl.rcParams['axes.unicode_minus'] = False
 
-fig = plt.figure()
+fig = plt.figure(figsize=(7*3.13,3*3.13))
 memoryspace_plt = fig.add_subplot(1, 2, 2)
 memoryspace_plt.set_xlim(-3, 3)
 memoryspace_plt.set_ylim(-7, 7)
