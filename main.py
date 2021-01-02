@@ -90,7 +90,7 @@ def keyboard_input(event):
 	memoryspace_plt.set_xlim(-3, 3)
 	memoryspace_plt.set_ylim(-7, 7)
 	memoryspace_plt.plot()
-	memoryspace.updateCurrent(memoryspace_plt)
+	memoryspace.updateCurrent()
 
 	mindmap_plt.clear()
 	mindmap_plt.set_xlim(-3, 3)
@@ -168,14 +168,16 @@ mpl.rcParams['axes.unicode_minus'] = False
 
 fig = plt.figure(figsize=(7*3.13,3*3.13))
 memoryspace_plt = fig.add_subplot(1, 2, 2)
+memoryspace_plt.axis('off')
 memoryspace_plt.set_xlim(-3, 3)
 memoryspace_plt.set_ylim(-7, 7)
-memoryspace = MemorySpace()
+memoryspace = MemorySpace(memoryspace_plt)
 
 mindmap_plt = fig.add_subplot(1, 2, 1)
+mindmap_plt.axis('off')
 mindmap_plt.set_xlim(-3, 3)
 mindmap_plt.set_ylim(-7, 7)
-mindmap = MindMap()
+mindmap = MindMap(mindmap_plt)
 
 swipeFlag = False
 moveNodeFlag = False

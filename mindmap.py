@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 class MindMap:
-	def __init__(self):
+	def __init__(self, axes):
 		self.currentG = nx.Graph()
 		self.topG = nx.Graph()
 		self.bottomG = nx.Graph()
@@ -15,6 +15,8 @@ class MindMap:
 		# 	[("A", "B"), ("B", "C"), ("C", "D")])
 		# self.Glevel3 = nx.Graph()
 		# self.Glevel4 = nx.Graph()
+
+		self.axes = axes
 
 		self.level0 = {"root": []}
 		self.level1 = {}
@@ -35,14 +37,14 @@ class MindMap:
 		self.updateCurrent()
 
 
-	def updateCurrent(self, axes=None):
 		pos = dict([(self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)/2, 2]) if i%2==0 else (self.currentNodeValue_list[i], [i - len(self.currentNodeValue_list)//2, -2]) for i in range(len(self.currentNodeValue_list))])
+	def updateCurrent(self):
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
-		nx.draw_networkx_nodes(self.currentG, pos, ax = axes, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 2000)
-		nx.draw_networkx_labels(self.currentG, pos, ax = axes, font_family = 'AppleGothic')
-		nx.draw_networkx_edges(self.currentG, pos, ax = axes, edgelist=self.getCurrentEdges(), arrows=False)
-		# print("updateCurrent MindMap")
+		nx.draw_networkx_nodes(self.currentG, pos, ax = self.axes, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 2000)
+		nx.draw_networkx_labels(self.currentG, pos, ax = self.axes, font_family = 'AppleGothic')
+		nx.draw_networkx_edges(self.currentG, pos, ax = self.axes, edgelist=self.getCurrentEdges(), arrows=False)
+		self.axes.axis('off')
 		print("MindMap", "currentLevel: ", self.current_level, self.currentNodeValue_list, "currentNode: ", self.currentNode)
 
 		return
@@ -55,7 +57,8 @@ class MindMap:
 
 		nx.draw_networkx_nodes(self.topG, pos, cmap = plt.get_cmap('jet'), node_color = self.node_colors, node_size = 2000)
 		nx.draw_networkx_labels(self.topG, pos, font_family = 'AppleGothic')
-		
+		self.axes.axis('off')
+
 		return
 
 
@@ -275,9 +278,11 @@ class MindMap:
 
 
 class MemorySpace(MindMap):
-	def __init__(self):
+	def __init__(self, axes):
 		# super().__init__()
 		self.currentG = nx.Graph()
+
+		self.axes = axes
 
 		self.level0 = {"root": []}
 		self.levels = [self.level0]
@@ -294,14 +299,17 @@ class MemorySpace(MindMap):
 		self.updateCurrent()
 
 
-	def updateCurrent(self, axes=None):
 		pos = dict([(self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, -2]) if i%2==0 else (self.currentNodeValue_list[i], [i-len(self.currentNodeValue_list)//2, 2]) for i in range(len(self.currentNodeValue_list))])
+	def updateCurrent(self):
 		self.node_colors = ['skyblue' if not node == self.currentNodeValue() else 'yellow' for node in self.currentG.nodes()]
 
-		nx.draw_networkx_nodes(self.currentG, pos, ax=axes, node_color = self.node_colors, node_size = 2000)
-		nx.draw_networkx_labels(self.currentG, pos, ax=axes, font_family = 'AppleGothic')
-		nx.draw_networkx_edges(self.currentG, pos, ax=axes, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
+		nx.draw_networkx_nodes(self.currentG, pos, ax=self.axes, node_color = self.node_colors, node_size = 2000)
+		nx.draw_networkx_labels(self.currentG, pos, ax=self.axes, font_family = 'AppleGothic')
+		nx.draw_networkx_edges(self.currentG, pos, ax=self.axes, edgelist=self.getCurrentEdges(), edge_color='white', arrows=False)
+		self.axes.axis('off')
 		print("MemorySpace", self.currentNodeValue_list, "currentNode: ", self.currentNode)
+
+		return
 
 
 	def addSpeech(self, newSpeech):
