@@ -224,6 +224,7 @@ class MindMap:
 			print("NOT IMPLEMENTED")
 			return
 
+		self.topG.clear()
 		self.topG.add_node(self.currentNodeValue())
 
 		self.currentNodePerLevel[self.current_level] = self.currentNode
@@ -250,9 +251,9 @@ class MindMap:
 			self.topG.clear()
 
 		else:
-			parentNodeValueList = self.getLevelNodeValueList(self.current_level-1)
-			parentNodeValue = parentNodeValueList[self.currentNodePerLevel[self.current_level-1]]
 			self.topG.clear()
+			parentNodeValueList = self.getLevelNodeValueList(self.current_level-2)
+			parentNodeValue = parentNodeValueList[self.currentNodePerLevel[self.current_level-2]]
 			self.topG.add_node(parentNodeValue)
 
 		self.currentNodePerLevel[self.current_level] = self.currentNode
