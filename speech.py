@@ -15,5 +15,4 @@ class Speech:
 			else:
 				newWordList += (["\n"] + wordList[i*3:(i+1)*3])
 
-		print(newWordList)
 		return ' '.join(newWordList)
