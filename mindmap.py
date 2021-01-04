@@ -219,6 +219,10 @@ class MindMap:
 
 		self.currentNode = self.getIndex(self.currentNodeValue_list, self.currentNode - 1)
 	
+		for i in range(len(self.currentNodePerLevel)):
+			if i > self.current_level:
+				self.currentNodePerLevel[i] = -1
+
 		return
 
 
@@ -227,6 +231,10 @@ class MindMap:
 			return
 		
 		self.currentNode = self.getIndex(self.currentNodeValue_list, self.currentNode + 1)
+
+		for i in range(len(self.currentNodePerLevel)):
+			if i > self.current_level:
+				self.currentNodePerLevel[i] = -1	
 
 		return
 
