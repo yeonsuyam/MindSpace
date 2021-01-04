@@ -46,6 +46,7 @@ class MindMap:
 		nx.draw_networkx_edges(self.currentG, pos, ax = self.axes, edgelist=self.getCurrentEdges(), arrows=False)
 		self.axes.axis('off')
 		print("MindMap", "currentLevel: ", self.current_level, self.currentNodeValue_list, "currentNode: ", self.currentNode)
+		print(self.level0, self.level1, self.level2, self.level3, self.level4)
 
 		return
 

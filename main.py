@@ -9,6 +9,8 @@ from time import sleep
 import serial
 import keyboard
 
+import sys
+
 
 # def update(event):
 # 	memoryspace_plt.clear()
@@ -33,30 +35,28 @@ def keyboard_input(event):
 	global swipeFlag
 	global moveNodeFlag
 
-	print()
+	print("\n", event.key)
+
+	if event.key == 'q':
+		print("\n\nERROR HAPPENED\n\n")
 
 	# Right hand for MemorySpace
 	if event.key == 'k':
 		swipeFlag = 2
 	elif event.key == 'u':
-		print("u")
 		newSpeech = speech.read()
 		if newSpeech != "":
 			memoryspace.addSpeech(newSpeech)
 	elif event.key == 'j':
 		if swipeFlag:
-			print("kj")
 			mindmap.addNode(memoryspace.popCurrentNode())
 			swipeFlag = False
 		else:
-			print("j")
 			memoryspace.toLeftNode()
 	elif event.key == 'l':
-		print("i")
 		memoryspace.toRightNode()
 	elif event.key == 'i':
 		if swipeFlag:
-			print("ki")
 			mindmap.addNodeToBottomLevel(memoryspace.popCurrentNode())
 			swipeFlag = False
 	
@@ -65,25 +65,19 @@ def keyboard_input(event):
 		moveNodeFlag = 2
 	elif event.key == 's':
 		if moveNodeFlag:
-			print("ds")
 			mindmap.moveNodeToLeft()
 			moveNodeFlag = False
 		else:
-			print("s")
 			mindmap.toLeftNode()
 	elif event.key == 'f':
 		if moveNodeFlag:
-			print("df")
 			mindmap.moveNodeToRight()
 			moveNodeFlag = False
 		else:
-			print("f")
 			mindmap.toRightNode()
 	elif event.key == 'e':
-		print("e")
 		mindmap.toTopLevel()
 	elif event.key == 'c':
-		print("c")
 		mindmap.toBottomLevel()
 
 	memoryspace_plt.clear()
@@ -157,7 +151,7 @@ def arduino(fig, memoryspace_plt, mindmap_plt):
 			
 	return
 
-
+sys.stdout = open('log.txt','w')
 speech = Speech()
 
 # Disable keyboard shortcuts in Matplotlib
