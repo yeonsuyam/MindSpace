@@ -28,7 +28,7 @@ class MindMap:
 		self.currentNodePerLevel = [-1, -1, -1, -1]
 		self.current_level = 0
 
-		self.currentNodeValue_list = self.getCurrentNodeValueList()
+		self.currentNodeValue_list = self.getCurrentLevelNodeValueList()
 		self.currentNode = -1
 
 		self.currentG.add_edges_from(self.getCurrentEdges())
@@ -63,7 +63,7 @@ class MindMap:
 
 
 	def redrawCurrent(self):
-		self.currentNodeValue_list = self.getCurrentNodeValueList()
+		self.currentNodeValue_list = self.getCurrentLevelNodeValueList()
 		self.currentG.clear()
 		if len(self.currentNodeValue_list) == 1:
 			self.currentG.add_nodes_from(self.currentNodeValue_list)
@@ -77,7 +77,7 @@ class MindMap:
 		return dict([(l[i], [i - (len(l)-1)/2.0, 2]) if i%2==0 else (l[i], [i - (len(l)-1)/2.0, -2]) for i in range(len(l))])
 
 
-	def getCurrentNodeValueList(self):
+	def getCurrentLevelNodeValueList(self):
 		nodeValue = "root"
 
 		for i in range(self.current_level + 1):
@@ -143,22 +143,22 @@ class MindMap:
 		
 		self.levels[self.current_level + 1][newSpeech] = []
 
-		if len(self.getCurrentNodeValueList()) == 0:
-			self.getCurrentNodeValueList().append(newSpeech)
+		if len(self.getCurrentLevelNodeValueList()) == 0:
+			self.getCurrentLevelNodeValueList().append(newSpeech)
 			self.currentG.add_nodes_from([(newSpeech)])
 			self.currentNode = 0
 
-		elif self.currentNode == len(self.getCurrentNodeValueList()) - 1:
-			self.getCurrentNodeValueList().append(newSpeech)
+		elif self.currentNode == len(self.getCurrentLevelNodeValueList()) - 1:
+			self.getCurrentLevelNodeValueList().append(newSpeech)
 			self.currentNode += 1
-			leftNodeValue = self.getCurrentNodeValueList()[self.currentNode - 1]
+			leftNodeValue = self.getCurrentLevelNodeValueList()[self.currentNode - 1]
 			self.currentG.add_edges_from([(leftNodeValue, newSpeech)])
 
 		else:
-			self.getCurrentNodeValueList().insert(self.currentNode + 1, newSpeech)
+			self.getCurrentLevelNodeValueList().insert(self.currentNode + 1, newSpeech)
 			self.currentNode += 1
-			leftNodeValue = self.getCurrentNodeValueList()[self.currentNode - 1]
-			rightNodeValue = self.getCurrentNodeValueList()[self.currentNode + 1]
+			leftNodeValue = self.getCurrentLevelNodeValueList()[self.currentNode - 1]
+			rightNodeValue = self.getCurrentLevelNodeValueList()[self.currentNode + 1]
 			self.currentG.remove_edge(leftNodeValue, rightNodeValue)
 			self.currentG.add_edges_from([(leftNodeValue, newSpeech), (newSpeech, rightNodeValue)])
 			
@@ -181,7 +181,7 @@ class MindMap:
 		keyOfTopLevel = self.getKeyOfTopLevel()
 		dictOfCurrentLevel = self.levels[self.current_level]
 
-		l = self.getCurrentNodeValueList()
+		l = self.getCurrentLevelNodeValueList()
 		x = self.currentNode
 
 		if x == 0:
@@ -199,7 +199,7 @@ class MindMap:
 		keyOfTopLevel = self.getKeyOfTopLevel()
 		dictOfCurrentLevel = self.levels[self.current_level]
 
-		l = self.getCurrentNodeValueList()
+		l = self.getCurrentLevelNodeValueList()
 		x = self.currentNode
 
 		if x == len(l) - 1:
@@ -245,7 +245,7 @@ class MindMap:
 		self.currentNodePerLevel[self.current_level] = self.currentNode
 		
 		self.current_level += 1
-		self.currentNodeValue_list = self.getCurrentNodeValueList()
+		self.currentNodeValue_list = self.getCurrentLevelNodeValueList()
 		self.currentNode = 0 if len(self.currentNodeValue_list) != 0 else -1
 
 		self.currentG.clear()
@@ -294,7 +294,7 @@ class MemorySpace(MindMap):
 		self.currentNodePerLevel = [-1]
 		self.current_level = 0
 
-		self.currentNodeValue_list = self.getCurrentNodeValueList()
+		self.currentNodeValue_list = self.getCurrentLevelNodeValueList()
 		self.currentNode = -1
 
 		self.currentG.add_edges_from(self.getCurrentEdges())
@@ -317,22 +317,22 @@ class MemorySpace(MindMap):
 
 
 	def addSpeech(self, newSpeech):
-		if len(self.getCurrentNodeValueList()) == 0:
+		if len(self.getCurrentLevelNodeValueList()) == 0:
 			self.currentG.add_nodes_from([(newSpeech)])
-			self.getCurrentNodeValueList().append(newSpeech)
+			self.getCurrentLevelNodeValueList().append(newSpeech)
 			self.currentNode = 0
 
 		else:
-			lastNodeValue = self.getCurrentNodeValueList()[-1]
-			self.getCurrentNodeValueList().append(newSpeech)
-			self.currentNode = len(self.getCurrentNodeValueList()) - 1
+			lastNodeValue = self.getCurrentLevelNodeValueList()[-1]
+			self.getCurrentLevelNodeValueList().append(newSpeech)
+			self.currentNode = len(self.getCurrentLevelNodeValueList()) - 1
 			self.currentG.add_edges_from([(lastNodeValue, newSpeech)])
 
 		return
 
 
 	def popCurrentNode(self):
-		currentNodeValueList = self.getCurrentNodeValueList()
+		currentNodeValueList = self.getCurrentLevelNodeValueList()
 		try:
 			currentNodeValue = currentNodeValueList[self.currentNode]
 		except:
@@ -349,7 +349,7 @@ class MemorySpace(MindMap):
 		except:
 			rightNode = -1
 		
-		self.getCurrentNodeValueList().pop(self.currentNode)
+		self.getCurrentLevelNodeValueList().pop(self.currentNode)
 		self.currentG.remove_node(currentNodeValue)
 
 		if leftNode	!= -1 and rightNode != -1:
